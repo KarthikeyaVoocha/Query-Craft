@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Query Craft</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Query Craft</h1>
+    </header>
+    <main>
+        <form id="query-form">
+            <textarea name="command" placeholder="Enter your command..." required></textarea>
+            <button type="submit">Submit</button>
+        </form>
+        <div id="response">
+            <h2>Response</h2>
+            <pre id="response-content"></pre>
+        </div>
+    </main>
+    <script>
+        const form = document.getElementById('query-form');
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const command = event.target.command.value;
+
+            const response = await fetch('/process_command', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ command }),
+            });
+            const result = await response.json();
+            document.getElementById('response-content').textContent = JSON.stringify(result, null, 2);
+        });
+    </script>
+</body>
+</html>
